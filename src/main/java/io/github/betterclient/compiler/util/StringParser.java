@@ -4,7 +4,15 @@ import java.util.Random;
 
 public class StringParser {
     public static String parse(String string) {
-        return string;
+        return string
+                .replace("\\\\", "\\")
+                .replace("\\\"", "\"")
+                .replace("\\'", "'")
+                .replace("\\t", "\t")
+                .replace("\\b", "\b")
+                .replace("\\n", "\n")
+                .replace("\\r", "\r")
+                .replace("\\f", "\f");
     }
 
     public static int find(String input) {
