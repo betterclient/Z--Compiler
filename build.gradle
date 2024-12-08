@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id "war"
+    id "org.teavm" version "0.10.2"
 }
 
 group 'io.github.betterclient'
@@ -14,4 +16,18 @@ dependencies {
 
     implementation "org.ow2.asm:asm:9.6"
     implementation "org.ow2.asm:asm-tree:9.6"
+    implementation teavm.libs.jsoApis
 }
+
+teavm.js {
+    addedToWebApp = true
+    mainClass = "io.github.betterclient.compiler.CompilerMain"
+
+    targetFileName = "compiler.js"
+    obfuscated = false
+    //sourceMap.set(true)
+    //debugInformation.set(true)
+    debugInformation.set(true)
+}
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_21

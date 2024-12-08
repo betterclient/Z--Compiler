@@ -10,7 +10,6 @@ import io.github.betterclient.compiler.symbol.Symbol;
 import io.github.betterclient.compiler.symbol.UsesSymbol;
 import io.github.betterclient.compiler.util.*;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,23 +22,18 @@ public class Compiler {
      * Compiles given STuPid code
      * @param code STuPid code
      * @param className classname eg: "io/github/betterclient/test/Main"
-     * @param classpath classpath for the compiler to resolve symbols. Can be null
-     *                  <p> Shouldn't contain java standard libraries
      * @return compiled code
      */
-    public static byte[] compile(String code, String className, List<URL> classpath) {
+    public static APIClass compile(String code, String className) {
         APIClass compiled = new APIClass(className);
-        compiled.access = new AccessType(VisibilityType.PUBLIC, false);
 
-        return new Compiler().compile(code, compiled, classpath == null ? new ArrayList<>() : classpath);
+        new Compiler().compile(code, compiled);
+        if (DEBUG_OUT) System.out.println("Compilation successful!\n");
+
+        return compiled;
     }
 
-    public byte[] compile(String code, APIClass compiled, List<URL> classpath) {
-        if (DEBUG_OUT) System.out.println("Parsing java standard libraries, this may take a bit.");
-        List<URL> java = JavaStandardLibrariesUtil.getJava();
-        classpath.addAll(java);
-        if (DEBUG_OUT) System.out.println("Found " + java.size() + " modules.");
-
+    public void compile(String code, APIClass compiled) {
         if (DEBUG_OUT) System.out.println("Compiling class: " + (compiled.packageName.isEmpty() ? "(default package) \"" : "\"") + compiled.fullName + "\"");
         List<String> lines = new ArrayList<>(List.of(code.split("\n")));
         lines.replaceAll(CommentUtils::remove2SlashComments);
@@ -60,7 +54,7 @@ public class Compiler {
         if (!symbols.isEmpty() && (symbols.get(0) instanceof UsesSymbol imports)) {
             imports0 = imports;
         }
-        imports0.validate(classpath);
+        imports0.validate();
 
         //Compile symbols
         for (Symbol symbol : symbols) {
@@ -80,7 +74,5 @@ public class Compiler {
         }
 
         compiled.addDefaultInit();
-
-        return compiled.bytecode();
     }
 }
