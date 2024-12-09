@@ -45,7 +45,6 @@ public class SupportedMethodCalls {
             case "clearProperty" -> a = System.clearProperty((String) otherArguments[0]);
             case "getenv" -> a = System.getenv((String) otherArguments[0]);
             case "identityHashCode" -> a = System.identityHashCode(otherArguments[0]);
-            case "loadLibrary" -> System.loadLibrary((String) otherArguments[0]);
 
             default -> throw new UnsupportedOperationException("java.lang.System . " + name + "() is unsupported.");
         }

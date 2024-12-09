@@ -18,8 +18,8 @@ public class GetRunner {
         try {
             Class<?> targetClass = Class.forName(className);
             return SupportedFieldGets.get(
-                    targetClass, target.name,
-                    target.isStatic ? null : CodeRunner.execute(code.instance, method)
+                    targetClass, target.name
+                    //, target.isStatic ? null : CodeRunner.execute(code.instance, method)
             );
         } catch (Exception e) {
             throw new FailedToRunCodeException(

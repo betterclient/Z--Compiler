@@ -24,7 +24,7 @@ teavm.js {
     mainClass = "io.github.betterclient.compiler.CompilerMain"
 
     targetFileName = "compiler.js"
-    obfuscated = false
+    obfuscated = true
     //sourceMap.set(true)
     //debugInformation.set(true)
     debugInformation.set(true)
