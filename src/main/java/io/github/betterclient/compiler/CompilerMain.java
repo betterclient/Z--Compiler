@@ -31,8 +31,6 @@ public class CompilerMain {
         document.getElementById("SIGMA_BUTTON_RUN_CODE").addEventListener("click", event -> {
             new Thread(CompilerMain::compile).start();
         });
-
-        JavaStandardLibrariesUtil.download();
     }
 
     private static void compile() {
@@ -40,6 +38,7 @@ public class CompilerMain {
         resetConsole();
 
         try {
+            JavaStandardLibrariesUtil.download();
             APIClass compiled = Compiler.compile(inputCode.trim(), "Main");
 
             CodeRunner.run(compiled);
