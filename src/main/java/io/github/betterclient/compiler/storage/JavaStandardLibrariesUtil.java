@@ -1,6 +1,5 @@
 package io.github.betterclient.compiler.storage;
 
-import io.github.betterclient.compiler.CompilerMain;
 import io.github.betterclient.compiler.api.APIClass;
 import io.github.betterclient.compiler.api.APIField;
 import io.github.betterclient.compiler.api.APIMethod;
@@ -10,11 +9,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
 import org.teavm.jso.browser.Window;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 //Used to generate cookies
 public class JavaStandardLibrariesUtil {
@@ -161,28 +156,27 @@ public class JavaStandardLibrariesUtil {
 
         Window window = Window.current();
 
-        if (window.getLocalStorage().getItem("data").isEmpty()) {
-            while (window.getLocalStorage().getItem("data").isEmpty()) {}
+        if (window.getLocalStorage().getItem("data0").isEmpty()) {
+            while (window.getLocalStorage().getItem("data0").isEmpty()) {}
         }
 
         List<String> strings = new ArrayList<>();
 
-        String code = window.getLocalStorage().getItem("data");
-        byte[] bites = Base64.getDecoder().decode(code);
-        String code0 = readString(bites);
+        String code = window.getLocalStorage().getItem("data0");
 
         APIClass currentClass = null;
-        for (String s : code0.split("\n")) {
+        for (String s : code.split("\n")) {
             if (s.isEmpty()) continue;
 
             String[] data = s.split(" ");
 
+            String name = data[1];
             if (s.startsWith("C")) {
-                currentClass = new APIClass(data[1]);
-                strings.add(data[1]);
+                currentClass = new APIClass(name);
+                strings.add(name);
             } else if (s.startsWith("E")) {
                 assert currentClass != null;
-                currentClass.extendingClass = data[1];
+                currentClass.extendingClass = name;
             } else if (s.startsWith("M")) {
                 assert currentClass != null;
                 MethodNode node = new MethodNode(
@@ -206,22 +200,26 @@ public class JavaStandardLibrariesUtil {
         return strings;
     }
 
-    private static String readString(byte[] bites) throws IOException {
-        String code0 = "";
-        ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(bites));
-        ZipEntry entry;
-        while ((entry = zis.getNextEntry()) != null) {
-            if (entry.getName().equals("classpath.map")) {
-                byte[] data = zis.readAllBytes();
-                code0 = new String(data);
-                break;
+    /*public static void main(String[] args) throws IOException {
+        File f = new File("./classpath.map");
+        List<String> classpathmap = Files.readAllLines(f.toPath());
+        StringBuilder sb = new StringBuilder();
+        String currentClass;
+        boolean add = false;
+        for (String s : classpathmap) {
+
+            String[] split = s.split(" ");
+            if (s.startsWith("C ")) {
+                currentClass = split[1];
+                add = SupportedMethodCalls.classNames.contains(currentClass) ||
+                        SupportedFieldGets.classNames.contains(currentClass);
+            }
+
+            if (add) {
+                sb.append(s).append("\n");
             }
         }
-        zis.close();
 
-        if (code0.isEmpty()) {
-            throw new IllegalStateException("Zip is broken.");
-        }
-        return code0;
-    }
+        Files.writeString(new File("claspath2.map").toPath(), sb.toString());
+    }*/
 }

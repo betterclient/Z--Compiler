@@ -17,5 +17,7 @@ async function downloadAndStoreString(url, key) {
     }
 }
 
+var a = 'https://gist.githubusercontent.com/betterclient/780216963856da56ae7214e0de89bd22/raw/e317dabe0ad7b48a68cb313e9b71225d38946131/claspath%2520shortened.map';
+
 // Get classpath.map from gist
-downloadAndStoreString('https://gist.githubusercontent.com/betterclient/780216963856da56ae7214e0de89bd22/raw/bd1be5a509f7b461d870ef3147fb9813b45a10ea/classpath.map%2520as%2520base64encoded%2520zip.txt', 'data');
+downloadAndStoreString(a, 'data0');

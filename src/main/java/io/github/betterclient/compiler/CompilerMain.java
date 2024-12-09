@@ -11,6 +11,8 @@ import java.io.PrintStream;
 
 public class CompilerMain {
     public static void main(String[] args) throws Exception {
+        JavaStandardLibrariesUtil.download();
+
         PrintStream old = System.out;
         System.setOut(new PrintStream(new OutputStream() {
             @Override
@@ -38,7 +40,6 @@ public class CompilerMain {
         resetConsole();
 
         try {
-            JavaStandardLibrariesUtil.download();
             APIClass compiled = Compiler.compile(inputCode.trim(), "Main");
 
             CodeRunner.run(compiled);

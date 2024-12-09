@@ -1,7 +1,7 @@
 package io.github.betterclient.compiler.web.proxy;
 
 public class SupportedFieldGets {
-    public static Object get(Class<?> fieldOwner, String name, Object instance) {
+    public static Object get(Class<?> fieldOwner, String name) {
         if (fieldOwner == System.class) {
             return handleSystemGet(name);
         }

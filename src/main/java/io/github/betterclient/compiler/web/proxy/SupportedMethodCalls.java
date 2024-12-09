@@ -37,12 +37,19 @@ public class SupportedMethodCalls {
     }
 
     private static Object handleSystem(String name, Object[] otherArguments) {
-        return switch (name) {
-            case "currentTimeMillis" -> System.currentTimeMillis();
-            case "nanoTime" -> System.nanoTime();
-            case "getProperty" -> System.getProperty((String) otherArguments[0]);
-            case "clearProperty" -> System.clearProperty((String) otherArguments[0]);
+        Object a = null;
+        switch (name) {
+            case "currentTimeMillis" -> a = System.currentTimeMillis();
+            case "nanoTime" -> a = System.nanoTime();
+            case "getProperty" -> a = System.getProperty((String) otherArguments[0]);
+            case "clearProperty" -> a = System.clearProperty((String) otherArguments[0]);
+            case "getenv" -> a = System.getenv((String) otherArguments[0]);
+            case "identityHashCode" -> a = System.identityHashCode(otherArguments[0]);
+            case "loadLibrary" -> System.loadLibrary((String) otherArguments[0]);
+
             default -> throw new UnsupportedOperationException("java.lang.System . " + name + "() is unsupported.");
-        };
+        }
+
+        return a;
     }
 }
