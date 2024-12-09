@@ -11,8 +11,6 @@ import java.io.PrintStream;
 
 public class CompilerMain {
     public static void main(String[] args) throws Exception {
-        JavaStandardLibrariesUtil.download();
-
         PrintStream old = System.out;
         System.setOut(new PrintStream(new OutputStream() {
             @Override
@@ -33,6 +31,8 @@ public class CompilerMain {
         document.getElementById("SIGMA_BUTTON_RUN_CODE").addEventListener("click", event -> {
             new Thread(CompilerMain::compile).start();
         });
+
+        JavaStandardLibrariesUtil.download();
     }
 
     private static void compile() {
